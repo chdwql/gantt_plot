@@ -54,7 +54,7 @@ def gantt(x1, x2, y, names):
 
 
 def main():
-    data = pd.read_csv('data.txt', sep=' ', parse_dates=True)
+    data = pd.read_csv('example.txt', sep=' ', parse_dates=True)
     x1 = pd.to_datetime(data.start)
     x2 = pd.to_datetime(data.end)
     y = data.ind
