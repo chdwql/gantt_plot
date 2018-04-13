@@ -1,2 +1,2 @@
-# gantt_plot
+# gantt plot
 plot time process diagram
