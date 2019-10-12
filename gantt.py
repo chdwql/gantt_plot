@@ -49,7 +49,7 @@ def gantt(x1, x2, y, names):
     for i in range(len(gytl)):
         gytl[i].set_color(col[i])
     plt.tight_layout()
-    plt.savefig('gantt.pdf', dpi=300)
+    plt.savefig('gantt.png', dpi=300)
     plt.close()
 
 
