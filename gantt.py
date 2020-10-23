@@ -13,10 +13,13 @@ from datetime import datetime, timedelta
 from matplotlib import rcParams
 import matplotlib
 import sys
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
 
 
 def gantt(x1, x2, y, names):
-    rcParams['font.sans-serif'] = ['STKaiti']
+    rcParams['font.sans-serif'] = ['STSong']
+    rcParams['font.style'] = 'normal'
 
     labs = []
     tickloc = []
@@ -24,7 +27,7 @@ def gantt(x1, x2, y, names):
     color = iter(cm.Dark2(np.linspace(0, 1, len(y))))
 
     # generate a line and line properties for each station
-    plt.subplots(1, 1, figsize=(8, 2))
+    plt.subplots(1, 1, figsize=(8, 6))
     ax = plt.subplot(1,1,1)
     for i in range(len(y)):
         c = next(color)
@@ -36,25 +39,27 @@ def gantt(x1, x2, y, names):
     plt.yticks(tickloc, labs)
 
     # create custom x labels
-    ax.xaxis.set_major_locator(matplotlib.dates.YearLocator(base=1, month=1,day=1))
-    ax.xaxis.set_minor_locator(matplotlib.dates.MonthLocator(interval=1))
+    ax.xaxis.set_major_locator(matplotlib.dates.YearLocator(base=5, month=1, day=1))
+    ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%Y'))
+    # ax.xaxis.set_minor_locator(matplotlib.dates.MonthLocator(interval=6))
+    ax.xaxis.set_minor_locator(matplotlib.dates.YearLocator(base=1, month=1, day=1))
     plt.xlim(datetime(np.min(x1).year,1,1), np.max(x2) + timedelta(days=180))
-    plt.xlabel('Date')
-    plt.ylabel('Station Names')
-    plt.title('Timeline')
+    plt.xlabel('时间/年')
+    plt.ylabel('地震异常')
+    # plt.title('Timeline')
     plt.grid(axis='y', linestyle='dotted')
 
     # color y labels to match lines
     gytl = plt.gca().get_yticklabels()
     for i in range(len(gytl)):
-        gytl[i].set_color(col[i])
+        gytl[i].set_color('black')
     plt.tight_layout()
-    plt.savefig('gantt.png', dpi=300)
+    plt.savefig('时间进程图.png', dpi=300)
     plt.close()
 
 
 def main():
-    data = pd.read_csv('example.txt', sep=' ', parse_dates=True)
+    data = pd.read_csv('example.txt', sep=' ', parse_dates=True, error_bad_lines=False)
     x1 = pd.to_datetime(data.start)
     x2 = pd.to_datetime(data.end)
     y = data.ind
